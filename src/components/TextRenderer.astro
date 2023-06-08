@@ -1,0 +1,37 @@
+---
+import type { Block } from "../lib/notion/types";
+
+interface Props {
+    block: Block;
+}
+const { block } = Astro.props;
+---
+
+{
+    block.text!.map((text) => {
+        let element = text.content;
+        if (text.link) {
+            element = (
+                <a class="text-blue-600 hover:underline" href={text.link}>
+                    {element}
+                </a>
+            );
+        }
+
+        switch (block.type) {
+            case "paragraph":
+                return <p>{element}</p>;
+            case "heading_1":
+                return <h1 class="text-3xl">{element}</h1>;
+            case "heading_2":
+                return <h2 class="text-2xl">{element}</h2>;
+            case "heading_3":
+                return <h3 class="text-xl">{element}</h3>;
+            case "bulleted_list_item":
+            case "numbered_list_item":
+                return <li>{element}</li>;
+            default:
+                break;
+        }
+    })
+}

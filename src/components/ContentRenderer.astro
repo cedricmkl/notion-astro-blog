@@ -1,0 +1,17 @@
+---
+import { Block, isTextBlock } from "../lib/notion/types";
+import TextRenderer from "./TextRenderer.astro";
+
+interface Props {
+    content: Block[];
+}
+const { content } = Astro.props;
+---
+
+<div>
+    {
+        content.map((block) => {
+            if (isTextBlock(block)) return <TextRenderer block={block} />;
+        })
+    }
+</div>

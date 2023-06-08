@@ -1,0 +1,22 @@
+---
+import ContentRenderer from "../components/ContentRenderer.astro";
+import Layout from "../layouts/Layout.astro";
+import { getBlogPosts, getPostBySlug } from "../lib/notion/api";
+
+export async function getStaticPaths() {
+    return (await getBlogPosts()).map((post) => ({
+        params: { slug: post.slug },
+    }));
+}
+
+const { slug } = Astro.params;
+const post = await getPostBySlug(slug!);
+if (post === null) throw new Error("Post not found");
+---
+
+<Layout title={post!.title}>
+    <article>
+        <h1 class="text-4xl">{post!.title}</h1>
+        <ContentRenderer content={post!.content} />
+    </article>
+</Layout>
